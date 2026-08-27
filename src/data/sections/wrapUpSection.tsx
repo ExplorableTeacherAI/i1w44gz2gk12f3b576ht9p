@@ -32,7 +32,7 @@ export const wrapUpSectionBlocks: ReactElement[] = [
     <StackLayout key="layout-wrap-up-next" maxWidth="xl">
         <Block id="wrap-up-next" padding="sm">
             <EditableParagraph id="para-wrap-up-next" blockId="wrap-up-next">
-                Two numbers shaped that line: where it starts, and how fast it climbs. The
+                Two numbers shaped that line: where it starts, and how fast it rises. The
                 unlock fee was the easy one to forget, and forgetting it was wrong by three
                 dollars every single time. Next you will put two lines on one graph, which
                 is how you settle whether the scooter or the bus is the better deal.

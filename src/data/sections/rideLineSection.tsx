@@ -350,7 +350,7 @@ export const rideLineSectionBlocks: ReactElement[] = [
                     highlightId="climb"
                     {...linkedHighlightPropsFromDefinition(getVariableInfo("scooterHighlight"))}
                 >
-                    climbs
+                    rises
                 </InlineLinkedHighlight>{" "}
                 at a steady fifty cents a minute. Those two numbers are the whole story of
                 this graph.

@@ -33,7 +33,7 @@ export const introSectionBlocks: ReactElement[] = [
         <Block id="intro-axes" padding="sm">
             <EditableParagraph id="para-intro-axes" blockId="intro-axes">
                 Everything you need is already sitting in one straight line on a graph.
-                Minutes ridden run along the bottom as x, and the cost in dollars climbs
+                Minutes ridden run along the bottom as x, and the cost in dollars rises
                 up the side as y. You have read points off axes like these before.
             </EditableParagraph>
         </Block>
