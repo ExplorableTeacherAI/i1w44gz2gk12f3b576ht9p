@@ -9,6 +9,7 @@ import { introSectionBlocks } from "./sections/introSection";
 import { rideLineSectionBlocks } from "./sections/rideLineSection";
 import { unlockFeeSectionBlocks } from "./sections/unlockFeeSection";
 import { budgetSectionBlocks } from "./sections/budgetSection";
+import { changingDealSectionBlocks } from "./sections/changingDealSection";
 import { wrapUpSectionBlocks } from "./sections/wrapUpSection";
 useVariableStore.getState().initialize(getDefaultValues());
 initializeVariableColors(variableDefinitions);
@@ -94,5 +95,6 @@ export const blocks: ReactElement[] = [
     ...rideLineSectionBlocks,
     ...unlockFeeSectionBlocks,
     ...budgetSectionBlocks,
+    ...changingDealSectionBlocks,
     ...wrapUpSectionBlocks,
 ];

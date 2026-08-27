@@ -144,6 +144,32 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
     },
 
     // ─────────────────────────────────────────
+    // Section 5 — the two numbers that shape the line
+    // ─────────────────────────────────────────
+    dealFee: {
+        defaultValue: 3,
+        type: 'number',
+        label: 'Unlock fee',
+        description: 'What this company charges before the wheels turn (start of the line)',
+        unit: '$',
+        min: 0,
+        max: 6,
+        step: 0.5,
+        color: '#3FA98A',
+    },
+    dealRate: {
+        defaultValue: 0.5,
+        type: 'number',
+        label: 'Price per minute',
+        description: 'What this company charges for each minute (steepness of the line)',
+        unit: '$',
+        min: 0.1,
+        max: 0.6,
+        step: 0.05,
+        color: '#6E70E8',
+    },
+
+    // ─────────────────────────────────────────
     // Assessment answers
     // ─────────────────────────────────────────
     answerCostAt14: {
@@ -172,6 +198,16 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         placeholder: '???',
         options: ['up', 'down', 'steeper', 'flatter'],
         correctAnswer: 'up',
+        color: '#8E90F5',
+    },
+    answerSteeper: {
+        defaultValue: '',
+        type: 'select',
+        label: 'What makes the line steeper',
+        description: 'Student answer: which of the two numbers changes the steepness',
+        placeholder: '???',
+        options: ['the price per minute', 'the unlock fee'],
+        correctAnswer: 'the price per minute',
         color: '#8E90F5',
     },
     answerMinutesFor6: {
