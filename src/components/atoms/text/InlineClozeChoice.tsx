@@ -258,7 +258,7 @@ export const InlineClozeChoice: React.FC<InlineClozeChoiceProps> = ({
                     onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
                     className={cn(
                         "select-none font-medium transition-all duration-150",
-                        "cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 rounded px-0.5 -mx-0.5"
+                        "cursor-pointer hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded px-0.5 -mx-0.5"
                     )}
                     style={{
                         color: effectiveColor,
@@ -317,7 +317,7 @@ export const InlineClozeChoice: React.FC<InlineClozeChoiceProps> = ({
                         className="inline-flex items-center font-medium cursor-pointer"
                         style={{
                             color: effectiveColor,
-                            borderBottom: `2px solid #EF4444`,
+                            borderBottom: `2px solid #B45309`,
                             paddingBottom: '1px',
                         }}
                     >
@@ -327,7 +327,7 @@ export const InlineClozeChoice: React.FC<InlineClozeChoiceProps> = ({
                         <button
                             onClick={handleClear}
                             className="inline-flex items-center justify-center ml-0.5 transition-all hover:scale-110"
-                            style={{ color: '#EF4444' }}
+                            style={{ color: '#B45309' }}
                             aria-label="Clear selection"
                         >
                             <X className="w-3 h-3" />
