@@ -81,84 +81,108 @@ export interface VariableDefinition {
  *    { defaultValue: { x: 5, y: 10 }, type: 'object', schema: '{ x: number, y: number }' }
  */
 export const variableDefinitions: Record<string, VariableDefinition> = {
-    // ========================================
-    // ADD YOUR VARIABLES HERE
-    // ========================================
-
-    // Uncomment and modify these examples for your lesson:
-
-    /*
     // ─────────────────────────────────────────
-    // NUMBER - Use with sliders
+    // Section 2 — the scooter cost line
     // ─────────────────────────────────────────
-    myValue: {
+    rideMinutes: {
+        defaultValue: 8,
+        type: 'number',
+        label: 'Minutes ridden',
+        description: 'How long the scooter is ridden (x on the graph)',
+        unit: 'min',
+        min: 0,
+        max: 20,
+        step: 1,
+        color: '#62D0AD',
+    },
+
+    // Shared highlight channel across every figure in this lesson.
+    // Ids: 'fee' | 'climb' | 'gap' | 'rateOnly'
+    scooterHighlight: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Scooter graph highlight',
+        description: 'Which part of the scooter graph is currently highlighted',
+        color: '#3FA98A',
+        bgColor: 'rgba(98, 208, 173, 0.22)',
+    },
+
+    // ─────────────────────────────────────────
+    // Section 3 — predicting the cost of a 10 minute ride
+    // ─────────────────────────────────────────
+    guessCost: {
+        defaultValue: 6.5,
+        type: 'number',
+        label: 'Your guess',
+        description: 'Student prediction of the cost of a 10 minute ride',
+        unit: '$',
+        min: 0,
+        max: 14,
+        step: 0.5,
+        color: '#62D0AD',
+    },
+    feeRevealed: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Real cost revealed',
+        description: 'Whether the true cost line has been revealed',
+    },
+
+    // ─────────────────────────────────────────
+    // Section 4 — working backwards from a budget
+    // ─────────────────────────────────────────
+    rideBudget: {
         defaultValue: 5,
         type: 'number',
-        label: 'My Value',
-        description: 'A number that controls something',
-        unit: 'm',           // optional unit display
-        min: 0,
-        max: 10,
+        label: 'Money available',
+        description: 'The budget the rider has to spend (y on the graph)',
+        unit: '$',
+        min: 1,
+        max: 13,
         step: 0.5,
+        color: '#62D0AD',
     },
 
     // ─────────────────────────────────────────
-    // TEXT - Free text input
+    // Assessment answers
     // ─────────────────────────────────────────
-    lessonTitle: {
-        defaultValue: 'My Lesson',
+    answerCostAt14: {
+        defaultValue: '',
         type: 'text',
-        label: 'Lesson Title',
-        description: 'The title of your lesson',
-        placeholder: 'Enter a title...',
+        label: 'Cost of a 14 minute ride',
+        description: 'Student answer: cost read off the line at 14 minutes',
+        placeholder: '???',
+        correctAnswer: ['10', '$10', '10.00', '$10.00', '10 dollars'],
+        color: '#8E90F5',
     },
-
-    // ─────────────────────────────────────────
-    // SELECT - Dropdown with options
-    // ─────────────────────────────────────────
-    difficulty: {
-        defaultValue: 'medium',
+    answerCostAt6: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Cost of a 6 minute ride',
+        description: 'Student answer: cost of a 6 minute ride (fee plus rate)',
+        placeholder: '???',
+        correctAnswer: ['6', '$6', '6.00', '$6.00', '6 dollars'],
+        color: '#8E90F5',
+    },
+    answerFeeShift: {
+        defaultValue: '',
         type: 'select',
-        label: 'Difficulty',
-        description: 'The difficulty level of the lesson',
-        options: ['easy', 'medium', 'hard', 'expert'],
+        label: 'Effect of the unlock fee',
+        description: 'Student answer: what the unlock fee does to the whole line',
+        placeholder: '???',
+        options: ['up', 'down', 'steeper', 'flatter'],
+        correctAnswer: 'up',
+        color: '#8E90F5',
     },
-
-    // ─────────────────────────────────────────
-    // BOOLEAN - Toggle switch
-    // ─────────────────────────────────────────
-    showHints: {
-        defaultValue: true,
-        type: 'boolean',
-        label: 'Show Hints',
-        description: 'Toggle to show or hide hints',
+    answerMinutesFor6: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Minutes for six dollars',
+        description: 'Student answer: minutes of riding six dollars buys',
+        placeholder: '???',
+        correctAnswer: ['6', '6 minutes', '6 min'],
+        color: '#8E90F5',
     },
-
-    // ─────────────────────────────────────────
-    // ARRAY - List of numbers
-    // ─────────────────────────────────────────
-    dataPoints: {
-        defaultValue: [1, 4, 9, 16, 25],
-        type: 'array',
-        label: 'Data Points',
-        description: 'Y-values for plotting a graph',
-    },
-
-    // ─────────────────────────────────────────
-    // OBJECT - Complex structured data
-    // ─────────────────────────────────────────
-    graphSettings: {
-        defaultValue: { 
-            xMin: -10, 
-            xMax: 10, 
-            showGrid: true 
-        },
-        type: 'object',
-        label: 'Graph Settings',
-        description: 'Configuration for the graph display',
-        schema: '{ xMin: number, xMax: number, showGrid: boolean }',
-    },
-    */
 };
 
 /**
