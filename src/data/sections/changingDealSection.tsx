@@ -50,12 +50,13 @@ import {
 } from "./scooterGraphShared";
 
 const DEFAULT_FEE = 3;
-const DEFAULT_RATE = 0.5;
+const DEFAULT_RATE = 30; // dollars per hour
+const MINUTES_PER_HOUR = 60;
 const RATE_HANDLE_MINUTES = 12; // where the steepness handle lives, always on screen
 
 const FEE_TEXT = "#3FA98A"; // readable teal for the readout text
 const RATE_TEXT = "#6E70E8"; // readable indigo for the readout text
-const RATE_HUE = "#8E90F5"; // price per minute — the second quantity
+const RATE_HUE = "#8E90F5"; // price per hour — the second quantity
 
 function DealDrawing() {
     const setVar = useSetVar();
@@ -76,7 +77,8 @@ function DealDrawing() {
         damping: 26,
     });
 
-    const costOf = (minutes: number) => fee + rate * minutes;
+    // The rate is quoted per hour, so each minute costs rate / 60.
+    const costOf = (minutes: number) => fee + (rate / MINUTES_PER_HOUR) * minutes;
     const rateHandleY = yPx(costOf(RATE_HANDLE_MINUTES));
 
     const handlePointerMove = (event: React.PointerEvent) => {
@@ -87,8 +89,8 @@ function DealDrawing() {
         if (which === "fee") {
             setVar("dealFee", clamp(Math.round(dollars * 2) / 2, 0, 6));
         } else {
-            const nextRate = (dollars - fee) / RATE_HANDLE_MINUTES;
-            setVar("dealRate", clamp(Math.round(nextRate * 20) / 20, 0.1, 0.6));
+            const perHour = ((dollars - fee) / RATE_HANDLE_MINUTES) * MINUTES_PER_HOUR;
+            setVar("dealRate", clamp(Math.round(perHour / 3) * 3, 6, 36));
         }
     };
 
@@ -117,7 +119,7 @@ function DealDrawing() {
             viewBox={`0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`}
             className="block w-full select-none"
             role="img"
-            aria-label="Cost line with draggable handles for the unlock fee and the price per minute"
+            aria-label="Cost line with draggable handles for the unlock fee and the hourly price"
         >
             <defs>
                 <filter id="deal-handle-shadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -141,7 +143,7 @@ function DealDrawing() {
                     {`${money(fee)} to unlock`}
                 </text>
                 <text x={VIEW_WIDTH - 24} y={30} fill={RATE_TEXT} textAnchor="end">
-                    {`${money(rate)} per minute`}
+                    {`${money(rate)} per hour`}
                 </text>
             </g>
 
@@ -242,7 +244,7 @@ function DealFigure() {
                 setVar("dealFee", DEFAULT_FEE);
                 setVar("dealRate", DEFAULT_RATE);
             }}
-            caption="Drag the teal dot on the cost axis to change the unlock fee, and the indigo dot at twelve minutes to change the price per minute. The dashed line is the deal from earlier."
+            caption="Drag the teal dot on the cost axis to change the unlock fee, and the indigo dot at twelve minutes to change the hourly price. The dashed line is the deal from earlier."
         >
             <DealDrawing />
             <div className="flex flex-col gap-3 px-6 pb-5">
@@ -254,7 +256,7 @@ function DealFigure() {
                 />
                 <FigureSlider
                     varName="dealRate"
-                    label="Price per minute"
+                    label="Price per hour"
                     {...numberPropsFromDefinition(getVariableInfo("dealRate"))}
                     formatValue={money}
                 />
@@ -312,7 +314,7 @@ export const changingDealSectionBlocks: ReactElement[] = [
                     {...numberPropsFromDefinition(getVariableInfo("dealRate"))}
                     formatValue={money}
                 />{" "}
-                a minute. Drag the{" "}
+                an hour. Drag the{" "}
                 <InlineSpotColor
                     varName="dealFee"
                     {...spotColorPropsFromDefinition(getVariableInfo("dealFee"))}
@@ -340,7 +342,7 @@ export const changingDealSectionBlocks: ReactElement[] = [
     <StackLayout key="layout-changing-deal-formula" maxWidth="xl">
         <Block id="changing-deal-formula" padding="lg">
             <FormulaBlock
-                latex="y = \scrub{dealFee} + \scrub{dealRate} \times x"
+                latex="y = \scrub{dealFee} + \dfrac{\scrub{dealRate}}{60} \times x"
                 variables={{
                     dealFee: {
                         ...scrubVarsFromDefinitions(["dealFee"]).dealFee,
@@ -372,9 +374,9 @@ export const changingDealSectionBlocks: ReactElement[] = [
                 you raise{" "}
                 <InlineFeedback
                     varName="answerSteeper"
-                    correctValue="the price per minute"
+                    correctValue="the price per hour"
                     position="terminal"
-                    successMessage="— yes, the per minute price is the one that changes the tilt"
+                    successMessage="— yes, the hourly price is the one that changes the tilt"
                     failureMessage="— try both dots on the graph once more"
                     hint="One dot moved the line without ever changing its angle"
                     reviewBlockId="changing-deal-figure"
@@ -382,8 +384,8 @@ export const changingDealSectionBlocks: ReactElement[] = [
                 >
                     <InlineClozeChoice
                         varName="answerSteeper"
-                        correctAnswer="the price per minute"
-                        options={["the price per minute", "the unlock fee"]}
+                        correctAnswer="the price per hour"
+                        options={["the price per hour", "the unlock fee"]}
                         {...choicePropsFromDefinition(getVariableInfo("answerSteeper"))}
                     />
                 </InlineFeedback>.
