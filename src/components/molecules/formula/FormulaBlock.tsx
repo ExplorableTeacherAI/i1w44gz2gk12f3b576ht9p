@@ -135,6 +135,22 @@ const DEFAULT_MIN = 0;
 const DEFAULT_MAX = 100;
 const DEFAULT_STEP = 1;
 const DEFAULT_SCRUB_COLOR = '#D81B60';
+
+/**
+ * Escape characters that are illegal in KaTeX math mode.
+ *
+ * `formatValue` returns human-readable strings such as `$3.00`, `45%`, or
+ * `12_000`. Injected raw into the LaTeX source those characters make KaTeX
+ * fail (a bare `$` in math mode is a parse error), so the whole formula stops
+ * rendering. Only the characters that are NEVER valid unescaped are touched —
+ * backslashes and `^` are left alone so formatters can still return LaTeX like
+ * `^\circ` or `\pi`. Already-escaped occurrences are left untouched.
+ */
+const escapeMathText = (text: string): string =>
+    text.replace(/(\\?)([$%#&_])/g, (_m, prefix: string, ch: string) =>
+        prefix === '\\' ? `${prefix}${ch}` : `\\${ch}`,
+    );
+
 const DRAG_SENSITIVITY = 2; // pixels per step
 
 /**
@@ -381,7 +397,7 @@ export const FormulaBlock: React.FC<FormulaBlockProps> = ({
             (_, varName: string) => {
                 const val = (allVars[varName] as number) ?? 0;
                 const col = resolvedColors[varName] ?? DEFAULT_SCRUB_COLOR;
-                const display = formatValue(varName, val);
+                const display = escapeMathText(formatValue(varName, val));
                 return `\\htmlClass{scrub-${varName}}{\\textcolor{${col}}{${display}}}`;
             },
         );
@@ -431,7 +447,7 @@ export const FormulaBlock: React.FC<FormulaBlockProps> = ({
             (_, varName: string) => {
                 const val = (allVars[varName] as number) ?? 0;
                 const col = resolvedColors[varName] ?? DEFAULT_SCRUB_COLOR;
-                const display = formatValue(varName, val);
+                const display = escapeMathText(formatValue(varName, val));
                 return `\\htmlClass{val-${varName}}{\\textcolor{${col}}{${display}}}`;
             },
         );
