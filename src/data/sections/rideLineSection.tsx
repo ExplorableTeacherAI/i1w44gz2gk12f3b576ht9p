@@ -12,8 +12,11 @@ import {
     EditableParagraph,
     InlineClozeInput,
     InlineFeedback,
+    InlineFormula,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
+    InlineSpotColor,
+    InlineTrigger,
     InteractionHintSequence,
 } from "@/components/atoms";
 import { Figure, FigureSlider } from "@/components/molecules";
@@ -24,16 +27,23 @@ import {
     getVariableInfo,
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
+    spotColorPropsFromDefinition,
 } from "../variables";
 import {
     ACCENT,
+    COST_TEXT,
     EASE_150,
+    FEE_HUE,
+    FEE_TEXT,
     GraphFrame,
     Halo,
     INK,
     INK_QUIET,
+    MINUTES_HUE,
+    MINUTES_TEXT,
     PLOT_BOTTOM,
     PLOT_LEFT,
+    RATE_TEXT,
     VIEW_HEIGHT,
     VIEW_WIDTH,
     X_MAX,
@@ -53,7 +63,7 @@ const DEFAULT_MINUTES = 8;
 
 function RideCostText() {
     const minutes = useVar<number>("rideMinutes", DEFAULT_MINUTES);
-    return <span>{money(costAt(minutes))}</span>;
+    return <span style={{ color: COST_TEXT, fontWeight: 500 }}>{money(costAt(minutes))}</span>;
 }
 
 // ── The drawing ─────────────────────────────────────────────────────────────
@@ -103,7 +113,7 @@ function RideLineDrawing() {
 
             <GraphFrame opacity={opacity("frame")} />
 
-            {/* Live reading, written as the calculation it is */}
+            {/* Live reading, written as the calculation it is — each part in its quantity's colour */}
             <text
                 x={VIEW_WIDTH / 2}
                 y={30}
@@ -113,7 +123,15 @@ function RideLineDrawing() {
                 opacity={opacity("readout")}
                 style={{ fontVariantNumeric: "tabular-nums", ...EASE_150 }}
             >
-                {`${minutes} min → $3 + $0.50 × ${minutes} = ${money(cost)}`}
+                <tspan fill={MINUTES_TEXT}>{`${minutes} min`}</tspan>
+                {" → "}
+                <tspan fill={FEE_TEXT}>$3</tspan>
+                {" + "}
+                <tspan fill={RATE_TEXT}>$0.50</tspan>
+                {" × "}
+                <tspan fill={MINUTES_TEXT}>{minutes}</tspan>
+                {" = "}
+                <tspan fill={COST_TEXT}>{money(cost)}</tspan>
             </text>
 
             {/* Where the last reading was taken — the before-state stays visible */}
@@ -189,7 +207,7 @@ function RideLineDrawing() {
                         y1={yPx(0)}
                         x2={PLOT_LEFT}
                         y2={yPx(3)}
-                        stroke={ACCENT}
+                        stroke={FEE_HUE}
                         strokeWidth="10"
                         strokeLinecap="round"
                     />
@@ -199,13 +217,13 @@ function RideLineDrawing() {
                     y1={yPx(0)}
                     x2={PLOT_LEFT}
                     y2={yPx(3)}
-                    stroke={ACCENT}
+                    stroke={FEE_HUE}
                     strokeWidth={weight("fee", 3.5)}
                     strokeLinecap="round"
                     style={EASE_150}
                 />
-                <circle cx={PLOT_LEFT} cy={yPx(3)} r={isActive("fee") ? 7 : 5.5} fill={ACCENT} />
-                <text x={PLOT_LEFT + 12} y={yPx(1.4)} fontSize="11" fill={INK}>
+                <circle cx={PLOT_LEFT} cy={yPx(3)} r={isActive("fee") ? 7 : 5.5} fill={FEE_HUE} />
+                <text x={PLOT_LEFT + 12} y={yPx(1.4)} fontSize="11" fill={FEE_TEXT}>
                     $3 to unlock
                 </text>
             </g>
@@ -217,10 +235,9 @@ function RideLineDrawing() {
                     y1={markerY}
                     x2={markerX}
                     y2={PLOT_BOTTOM}
-                    stroke={ACCENT}
-                    strokeWidth="1.5"
+                    stroke={MINUTES_HUE}
+                    strokeWidth="2"
                     strokeDasharray="4 4"
-                    opacity={0.75}
                 />
                 <line
                     x1={markerX}
@@ -271,7 +288,7 @@ function RideLineFigure() {
         <Figure
             id="ride-line"
             onReset={() => setVar("rideMinutes", DEFAULT_MINUTES)}
-            caption="Drag the teal marker along the line. The dashed guides show the minutes you picked and the cost that goes with them."
+            caption="Drag the teal marker along the line. The dashed guides show the minutes you picked (rose) and the cost that goes with them (teal)."
         >
             <RideLineDrawing />
             <div className="px-6 pb-5">
@@ -313,8 +330,23 @@ export const rideLineSectionBlocks: ReactElement[] = [
     <StackLayout key="layout-ride-line-setup" maxWidth="xl">
         <Block id="ride-line-setup" padding="sm">
             <EditableParagraph id="para-ride-line-setup" blockId="ride-line-setup">
-                This scooter charges three dollars to unlock, then fifty cents for every
-                minute you ride. At{" "}
+                This scooter charges{" "}
+                <InlineSpotColor
+                    id="spot-ride-line-setup-fee"
+                    varName="dealFee"
+                    {...spotColorPropsFromDefinition(getVariableInfo("dealFee"))}
+                >
+                    three dollars
+                </InlineSpotColor>{" "}
+                to unlock, then{" "}
+                <InlineSpotColor
+                    id="spot-ride-line-setup-rate"
+                    varName="dealRate"
+                    {...spotColorPropsFromDefinition(getVariableInfo("dealRate"))}
+                >
+                    fifty cents
+                </InlineSpotColor>{" "}
+                for every minute you ride. At{" "}
                 <InlineScrubbleNumber
                     varName="rideMinutes"
                     {...numberPropsFromDefinition(getVariableInfo("rideMinutes"))}
@@ -341,10 +373,21 @@ export const rideLineSectionBlocks: ReactElement[] = [
                     varName="scooterHighlight"
                     highlightId="fee"
                     {...linkedHighlightPropsFromDefinition(getVariableInfo("scooterHighlight"))}
+                    color="#D9921A"
+                    bgColor="rgba(247, 178, 59, 0.22)"
                 >
                     unlock fee
                 </InlineLinkedHighlight>{" "}
-                before the wheels even turn, and from there the line{" "}
+                <InlineTrigger
+                    id="trigger-ride-line-zero-minutes"
+                    varName="rideMinutes"
+                    value={0}
+                    color="#D4589A"
+                    bgColor="rgba(248, 160, 205, 0.2)"
+                >
+                    before the wheels even turn
+                </InlineTrigger>
+                , and from there the line{" "}
                 <InlineLinkedHighlight
                     varName="scooterHighlight"
                     highlightId="climb"
@@ -353,7 +396,13 @@ export const rideLineSectionBlocks: ReactElement[] = [
                     rises
                 </InlineLinkedHighlight>{" "}
                 at a steady fifty cents a minute. Those two numbers are the whole story of
-                this graph.
+                this graph:{" "}
+                <InlineFormula
+                    id="formula-ride-line-equation"
+                    latex="\clr{cost}{y} = \clr{unlock}{3} + \clr{rate}{0.5}\,\clr{minutes}{x}"
+                    colorMap={{ cost: "#3FA98A", unlock: "#D9921A", rate: "#6E70E8", minutes: "#D4589A" }}
+                    color="#334155"
+                />.
             </EditableParagraph>
         </Block>
     </StackLayout>,

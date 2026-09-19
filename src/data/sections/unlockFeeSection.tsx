@@ -15,6 +15,7 @@ import {
     InlineClozeInput,
     InlineFeedback,
     InlineLinkedHighlight,
+    InlineTrigger,
     InteractionHintSequence,
 } from "@/components/atoms";
 import { Figure, FigureSlider } from "@/components/molecules";
@@ -29,7 +30,10 @@ import {
 } from "../variables";
 import {
     ACCENT,
+    COST_TEXT,
     EASE_150,
+    FEE_HUE,
+    FEE_TEXT,
     GraphFrame,
     Halo,
     INK,
@@ -109,7 +113,7 @@ function GuessDrawing() {
                         <text
                             x={VIEW_WIDTH - 24}
                             y={30}
-                            fill={ACCENT}
+                            fill={COST_TEXT}
                             textAnchor="end"
                             opacity={opacity("readout")}
                         >
@@ -219,7 +223,7 @@ function GuessDrawing() {
                                 y1={yPx(RATE_ONLY_COST)}
                                 x2={gapX}
                                 y2={yPx(TRUE_COST)}
-                                stroke={ACCENT}
+                                stroke={FEE_HUE}
                                 strokeWidth="10"
                                 strokeLinecap="round"
                             />
@@ -229,7 +233,7 @@ function GuessDrawing() {
                             y1={yPx(RATE_ONLY_COST)}
                             x2={gapX}
                             y2={yPx(TRUE_COST)}
-                            stroke={ACCENT}
+                            stroke={FEE_HUE}
                             strokeWidth={weight("gap", 3)}
                             strokeLinecap="round"
                             style={EASE_150}
@@ -239,7 +243,7 @@ function GuessDrawing() {
                             y1={yPx(RATE_ONLY_COST)}
                             x2={gapX + 5}
                             y2={yPx(RATE_ONLY_COST)}
-                            stroke={ACCENT}
+                            stroke={FEE_HUE}
                             strokeWidth="2"
                             strokeLinecap="round"
                         />
@@ -248,11 +252,11 @@ function GuessDrawing() {
                             y1={yPx(TRUE_COST)}
                             x2={gapX + 5}
                             y2={yPx(TRUE_COST)}
-                            stroke={ACCENT}
+                            stroke={FEE_HUE}
                             strokeWidth="2"
                             strokeLinecap="round"
                         />
-                        <text x={gapX + 10} y={193} fontSize="11" fill={INK}>
+                        <text x={gapX + 10} y={193} fontSize="11" fill={FEE_TEXT}>
                             +$3 unlock fee
                         </text>
                     </g>
@@ -400,12 +404,23 @@ export const unlockFeeSectionBlocks: ReactElement[] = [
     <StackLayout key="layout-unlock-fee-reflection" maxWidth="xl">
         <Block id="unlock-fee-reflection" padding="sm">
             <EditableParagraph id="para-unlock-fee-reflection" blockId="unlock-fee-reflection">
-                Most first guesses land on five dollars, which is fifty cents times ten and
-                nothing else. The{" "}
+                Most first guesses land on{" "}
+                <InlineTrigger
+                    id="trigger-unlock-fee-guess-five"
+                    varName="guessCost"
+                    value={5}
+                    color="#3FA98A"
+                    bgColor="rgba(98, 208, 173, 0.22)"
+                >
+                    five dollars
+                </InlineTrigger>
+                , which is fifty cents times ten and nothing else. The{" "}
                 <InlineLinkedHighlight
                     varName="scooterHighlight"
                     highlightId="rateOnly"
                     {...linkedHighlightPropsFromDefinition(getVariableInfo("scooterHighlight"))}
+                    color="#64748B"
+                    bgColor="rgba(100, 116, 139, 0.16)"
                 >
                     dashed line
                 </InlineLinkedHighlight>{" "}
@@ -414,6 +429,8 @@ export const unlockFeeSectionBlocks: ReactElement[] = [
                     varName="scooterHighlight"
                     highlightId="gap"
                     {...linkedHighlightPropsFromDefinition(getVariableInfo("scooterHighlight"))}
+                    color="#D9921A"
+                    bgColor="rgba(247, 178, 59, 0.22)"
                 >
                     three dollars
                 </InlineLinkedHighlight>{" "}

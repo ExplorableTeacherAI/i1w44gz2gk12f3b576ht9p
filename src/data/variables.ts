@@ -81,6 +81,12 @@ export interface VariableDefinition {
  *    { defaultValue: { x: 5, y: 10 }, type: 'object', schema: '{ x: number, y: number }' }
  */
 export const variableDefinitions: Record<string, VariableDefinition> = {
+    // Lesson-wide colour map (mirrors scooterGraphShared.tsx):
+    //   cost y = teal #3FA98A · unlock fee = amber #D9921A
+    //   price per minute/hour = indigo #6E70E8 · minutes x = rose #D4589A
+    // Answer blanks take the colour of the quantity they ask for; the two
+    // concept choices stay a neutral violet so the colour never hints the answer.
+
     // ─────────────────────────────────────────
     // Section 2 — the scooter cost line
     // ─────────────────────────────────────────
@@ -93,11 +99,11 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         min: 0,
         max: 20,
         step: 1,
-        color: '#62D0AD',
+        color: '#D4589A',
     },
 
     // Shared highlight channel across every figure in this lesson.
-    // Ids: 'fee' | 'climb' | 'gap' | 'rateOnly'
+    // Ids: 'fee' | 'climb' | 'gap' | 'rateOnly' | 'budgetLine'
     scooterHighlight: {
         defaultValue: '',
         type: 'text',
@@ -140,7 +146,7 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         min: 1,
         max: 13,
         step: 0.5,
-        color: '#62D0AD',
+        color: '#3FA98A',
     },
 
     // ─────────────────────────────────────────
@@ -155,7 +161,7 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         min: 0,
         max: 6,
         step: 0.5,
-        color: '#3FA98A',
+        color: '#D9921A',
     },
     dealRate: {
         defaultValue: 30,
@@ -179,7 +185,8 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         description: 'Student answer: cost read off the line at 14 minutes',
         placeholder: '???',
         correctAnswer: ['10', '$10', '10.00', '$10.00', '10 dollars'],
-        color: '#8E90F5',
+        color: '#3FA98A',
+        bgColor: 'rgba(98, 208, 173, 0.18)',
     },
     answerCostAt6: {
         defaultValue: '',
@@ -188,7 +195,8 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         description: 'Student answer: cost of a 6 minute ride (fee plus rate)',
         placeholder: '???',
         correctAnswer: ['6', '$6', '6.00', '$6.00', '6 dollars'],
-        color: '#8E90F5',
+        color: '#3FA98A',
+        bgColor: 'rgba(98, 208, 173, 0.18)',
     },
     answerFeeShift: {
         defaultValue: '',
@@ -198,7 +206,8 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         placeholder: '???',
         options: ['up', 'down', 'steeper', 'flatter'],
         correctAnswer: 'up',
-        color: '#8E90F5',
+        color: '#AC8BF9',
+        bgColor: 'rgba(172, 139, 249, 0.18)',
     },
     answerSteeper: {
         defaultValue: '',
@@ -208,7 +217,8 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         placeholder: '???',
         options: ['the price per hour', 'the unlock fee'],
         correctAnswer: 'the price per hour',
-        color: '#8E90F5',
+        color: '#AC8BF9',
+        bgColor: 'rgba(172, 139, 249, 0.18)',
     },
     answerMinutesFor6: {
         defaultValue: '',
@@ -217,7 +227,8 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         description: 'Student answer: minutes of riding six dollars buys',
         placeholder: '???',
         correctAnswer: ['6', '6 minutes', '6 min'],
-        color: '#8E90F5',
+        color: '#D4589A',
+        bgColor: 'rgba(248, 160, 205, 0.2)',
     },
 };
 

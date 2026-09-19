@@ -12,8 +12,10 @@ import {
     EditableParagraph,
     InlineClozeInput,
     InlineFeedback,
+    InlineFormula,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
+    InlineTrigger,
     InteractionHintSequence,
 } from "@/components/atoms";
 import { Figure, FigureSlider } from "@/components/molecules";
@@ -27,12 +29,14 @@ import {
 } from "../variables";
 import {
     ACCENT,
+    COST_TEXT,
     EASE_150,
     GraphFrame,
     Halo,
     INK,
     INK_STRUCTURE,
-    PARTNER,
+    MINUTES_HUE,
+    MINUTES_TEXT,
     PLOT_BOTTOM,
     PLOT_LEFT,
     PLOT_RIGHT,
@@ -60,7 +64,11 @@ const affordableMinutes = (budget: number) =>
 
 function AffordableMinutesText() {
     const budget = useVar<number>("rideBudget", DEFAULT_BUDGET);
-    return <span>{Math.round(affordableMinutes(budget))}</span>;
+    return (
+        <span style={{ color: MINUTES_TEXT, fontWeight: 500 }}>
+            {Math.round(affordableMinutes(budget))}
+        </span>
+    );
 }
 
 function BudgetDrawing() {
@@ -131,13 +139,13 @@ function BudgetDrawing() {
 
             {/* Readouts: the money you set, the minutes the graph gives back */}
             <g fontSize="12" style={{ fontVariantNumeric: "tabular-nums", ...EASE_150 }}>
-                <text x={24} y={30} fill={ACCENT} opacity={opacity("budgetLine")}>
+                <text x={24} y={30} fill={COST_TEXT} opacity={opacity("budgetLine")}>
                     {`budget ${money(budget)}`}
                 </text>
                 <text
                     x={VIEW_WIDTH - 24}
                     y={30}
-                    fill={PARTNER}
+                    fill={MINUTES_TEXT}
                     textAnchor="end"
                     opacity={opacity("frame")}
                 >
@@ -169,16 +177,16 @@ function BudgetDrawing() {
                         y1={budgetY}
                         x2={crossingX}
                         y2={PLOT_BOTTOM}
-                        stroke={PARTNER}
+                        stroke={MINUTES_HUE}
                         strokeWidth="2"
                         strokeDasharray="5 4"
                     />
-                    <circle cx={crossingX} cy={PLOT_BOTTOM} r="6" fill={PARTNER} />
+                    <circle cx={crossingX} cy={PLOT_BOTTOM} r="6" fill={MINUTES_HUE} />
                     <text
                         x={labelX}
                         y={PLOT_BOTTOM - 12}
                         fontSize="11"
-                        fill={PARTNER}
+                        fill={MINUTES_TEXT}
                         textAnchor={labelAnchor}
                         style={{ fontVariantNumeric: "tabular-nums" }}
                     >
@@ -246,7 +254,7 @@ function BudgetFigure() {
         <Figure
             id="budget-line"
             onReset={() => setVar("rideBudget", DEFAULT_BUDGET)}
-            caption="Drag the teal budget line up and down. Where it meets the cost line, the dashed drop shows the minutes that money buys."
+            caption="Drag the teal budget line up and down. Where it meets the cost line, the dashed rose drop shows the minutes that money buys."
         >
             <BudgetDrawing />
             <div className="px-6 pb-5">
@@ -288,7 +296,10 @@ export const budgetSectionBlocks: ReactElement[] = [
     <StackLayout key="layout-budget-setup" maxWidth="xl">
         <Block id="budget-setup" padding="sm">
             <EditableParagraph id="para-budget-setup" blockId="budget-setup">
-                Now flip the question: you know the money, not the minutes. With{" "}
+                Now flip the question: you know the money{" "}
+                <InlineFormula id="formula-budget-setup-cost" latex="\clr{cost}{y}" colorMap={{ cost: "#3FA98A" }} />, not the
+                minutes{" "}
+                <InlineFormula id="formula-budget-setup-minutes" latex="\clr{minutes}{x}" colorMap={{ minutes: "#D4589A" }} />. With{" "}
                 <InlineScrubbleNumber
                     varName="rideBudget"
                     {...numberPropsFromDefinition(getVariableInfo("rideBudget"))}
@@ -318,8 +329,17 @@ export const budgetSectionBlocks: ReactElement[] = [
         <Block id="budget-reflection" padding="sm">
             <EditableParagraph id="para-budget-reflection" blockId="budget-reflection">
                 Reading down from a cost is the same graph doing the opposite job. Drop the
-                budget under three dollars and the two lines never meet, because the unlock
-                fee alone has eaten it.
+                budget{" "}
+                <InlineTrigger
+                    id="trigger-budget-under-unlock-fee"
+                    varName="rideBudget"
+                    value={2}
+                    color="#3FA98A"
+                    bgColor="rgba(98, 208, 173, 0.22)"
+                >
+                    under three dollars
+                </InlineTrigger>{" "}
+                and the two lines never meet, because the unlock fee alone has eaten it.
             </EditableParagraph>
         </Block>
     </StackLayout>,

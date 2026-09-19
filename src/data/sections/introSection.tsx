@@ -7,7 +7,7 @@
 import { type ReactElement } from "react";
 import { StackLayout } from "@/components/layouts";
 import { Block } from "@/components/templates";
-import { EditableH1, EditableParagraph } from "@/components/atoms";
+import { EditableH1, EditableParagraph, InlineFormula } from "@/components/atoms";
 
 export const introSectionBlocks: ReactElement[] = [
     <StackLayout key="layout-intro-title" maxWidth="xl">
@@ -33,8 +33,11 @@ export const introSectionBlocks: ReactElement[] = [
         <Block id="intro-axes" padding="sm">
             <EditableParagraph id="para-intro-axes" blockId="intro-axes">
                 Everything you need is already sitting in one straight line on a graph.
-                Minutes ridden run along the bottom as x, and the cost in dollars rises
-                up the side as y. You have read points off axes like these before.
+                Minutes ridden run along the bottom as{" "}
+                <InlineFormula id="formula-intro-axes-minutes" latex="\clr{minutes}{x}" colorMap={{ minutes: "#D4589A" }} />, and
+                the cost in dollars rises up the side as{" "}
+                <InlineFormula id="formula-intro-axes-cost" latex="\clr{cost}{y}" colorMap={{ cost: "#3FA98A" }} />. You have
+                read points off axes like these before.
             </EditableParagraph>
         </Block>
     </StackLayout>,

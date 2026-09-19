@@ -14,6 +14,7 @@ import {
     InlineFeedback,
     InlineScrubbleNumber,
     InlineSpotColor,
+    InlineTooltip,
     InteractionHintSequence,
 } from "@/components/atoms";
 import { Figure, FigureSlider } from "@/components/molecules";
@@ -30,6 +31,8 @@ import {
 import {
     ACCENT,
     EASE_150,
+    FEE_HUE,
+    FEE_TEXT,
     GraphFrame,
     INK_QUIET,
     INK_STRUCTURE,
@@ -37,7 +40,9 @@ import {
     PLOT_LEFT,
     PLOT_RIGHT,
     PLOT_TOP,
+    RATE_HUE,
     RATE_PER_MINUTE,
+    RATE_TEXT,
     UNLOCK_FEE,
     VIEW_HEIGHT,
     VIEW_WIDTH,
@@ -54,9 +59,8 @@ const DEFAULT_RATE = 30; // dollars per hour
 const MINUTES_PER_HOUR = 60;
 const RATE_HANDLE_MINUTES = 12; // where the steepness handle lives, always on screen
 
-const FEE_TEXT = "#3FA98A"; // readable teal for the readout text
-const RATE_TEXT = "#6E70E8"; // readable indigo for the readout text
-const RATE_HUE = "#8E90F5"; // price per hour — the second quantity
+// Colours come from the lesson-wide map in scooterGraphShared: the unlock fee is
+// amber, the hourly price indigo, and the cost line itself stays teal.
 
 function DealDrawing() {
     const setVar = useSetVar();
@@ -180,7 +184,7 @@ function DealDrawing() {
             {/* Handle 1: the starting cost, on the cost axis */}
             <g>
                 <g transform={`translate(${PLOT_LEFT} ${yPx(fee)}) scale(${feeScale})`}>
-                    <circle r="11" fill={ACCENT} filter="url(#deal-handle-shadow)" />
+                    <circle r="11" fill={FEE_HUE} filter="url(#deal-handle-shadow)" />
                 </g>
                 <circle
                     cx={PLOT_LEFT}
@@ -244,7 +248,7 @@ function DealFigure() {
                 setVar("dealFee", DEFAULT_FEE);
                 setVar("dealRate", DEFAULT_RATE);
             }}
-            caption="Drag the teal dot on the cost axis to change the unlock fee, and the indigo dot at twelve minutes to change the hourly price. The dashed line is the deal from earlier."
+            caption="Drag the amber dot on the cost axis to change the unlock fee, and the indigo dot at twelve minutes to change the hourly price. The dashed line is the deal from earlier."
         >
             <DealDrawing />
             <div className="flex flex-col gap-3 px-6 pb-5">
@@ -266,7 +270,7 @@ function DealFigure() {
                 steps={[
                     {
                         gesture: "drag-vertical",
-                        label: "Drag the teal dot up the cost axis",
+                        label: "Drag the amber dot up the cost axis",
                         position: { x: "14%", y: "69%" },
                         dragPath: {
                             type: "line",
@@ -319,7 +323,7 @@ export const changingDealSectionBlocks: ReactElement[] = [
                     varName="dealFee"
                     {...spotColorPropsFromDefinition(getVariableInfo("dealFee"))}
                 >
-                    teal dot
+                    amber dot
                 </InlineSpotColor>{" "}
                 on the cost axis, then the{" "}
                 <InlineSpotColor
@@ -342,7 +346,8 @@ export const changingDealSectionBlocks: ReactElement[] = [
     <StackLayout key="layout-changing-deal-formula" maxWidth="xl">
         <Block id="changing-deal-formula" padding="lg">
             <FormulaBlock
-                latex="y = \scrub{dealFee} + \dfrac{\scrub{dealRate}}{60} \times x"
+                latex="\clr{cost}{y} = \scrub{dealFee} + \dfrac{\scrub{dealRate}}{60} \times \clr{minutes}{x}"
+                colorMap={{ cost: "#3FA98A", minutes: "#D4589A" }}
                 variables={{
                     dealFee: {
                         ...scrubVarsFromDefinitions(["dealFee"]).dealFee,
@@ -360,9 +365,25 @@ export const changingDealSectionBlocks: ReactElement[] = [
     <StackLayout key="layout-changing-deal-reflection" maxWidth="xl">
         <Block id="changing-deal-reflection" padding="sm">
             <EditableParagraph id="para-changing-deal-reflection" blockId="changing-deal-reflection">
-                Only one of those two numbers tilts the line. The unlock fee slides the
-                whole line up and down while its steepness stays exactly the same, which is
-                why the two numbers in the equation do such different jobs.
+                Only one of those two numbers tilts the line. The{" "}
+                <InlineSpotColor
+                    id="spot-changing-deal-reflection-fee"
+                    varName="dealFee"
+                    {...spotColorPropsFromDefinition(getVariableInfo("dealFee"))}
+                >
+                    unlock fee
+                </InlineSpotColor>{" "}
+                slides the whole line up and down while its{" "}
+                <InlineTooltip
+                    id="tooltip-changing-deal-steepness"
+                    tooltip="How sharply the line tilts: the dollars added to the cost for each extra minute."
+                    color="#6E70E8"
+                    bgColor="rgba(142, 144, 245, 0.16)"
+                >
+                    steepness
+                </InlineTooltip>{" "}
+                stays exactly the same, which is why the two numbers in the equation do such
+                different jobs.
             </EditableParagraph>
         </Block>
     </StackLayout>,

@@ -55,6 +55,19 @@ export const GRID = "#EEF2F6";
 export const ACCENT = "#62D0AD"; // the manipulable quantity
 export const PARTNER = "#8E90F5"; // only for the covariation partner (minutes answer)
 
+// ── Lesson-wide quantity colours: one quantity, one hue, in every figure ─────
+// *_HUE paints strokes and dots. *_TEXT is the readable shade of the same hue,
+// used for figure readouts, prose, scrubbable numbers and formulas.
+
+export const COST_HUE = ACCENT; // y, the cost: the line itself, budgets, guesses
+export const COST_TEXT = "#3FA98A";
+export const FEE_HUE = "#F7B23B"; // the unlock fee: where the line starts
+export const FEE_TEXT = "#D9921A";
+export const RATE_HUE = "#8E90F5"; // the price per minute or hour: the steepness
+export const RATE_TEXT = "#6E70E8";
+export const MINUTES_HUE = "#F8A0CD"; // x, the minutes ridden
+export const MINUTES_TEXT = "#D4589A";
+
 export const EASE_150 = {
     transition: "opacity 150ms ease, stroke-width 150ms ease",
 } as const;
@@ -178,14 +191,14 @@ export function GraphFrame({ opacity = 1 }: { opacity?: number }) {
             </g>
 
             {/* Direct axis titles — no legend anywhere in this lesson */}
-            <text x={30} y={54} fontSize="11" fill={INK_STRUCTURE}>
+            <text x={30} y={54} fontSize="11" fill={COST_TEXT}>
                 cost in dollars (y)
             </text>
             <text
                 x={(PLOT_LEFT + PLOT_RIGHT) / 2}
                 y={PLOT_BOTTOM + 44}
                 fontSize="11"
-                fill={INK_STRUCTURE}
+                fill={MINUTES_TEXT}
                 textAnchor="middle"
             >
                 minutes ridden (x)
